@@ -20,7 +20,6 @@ A comprehensive web application that helps farmers improve their farming practic
 
 ```
 farmer-helper/
-├── frontend/           # React.js frontend application
 ├── backend/           # Node.js backend application
 └── README.md          # Project documentation
 ```
