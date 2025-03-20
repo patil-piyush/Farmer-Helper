@@ -1,0 +1,124 @@
+<div class="container-fluid">
+    <h2 class="mb-4">Weather Forecast</h2>
+    
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Current Weather</h5>
+                </div>
+                <div class="card-body">
+                    <div id="currentWeather">
+                        <div class="text-center">
+                            <i class="fas fa-cloud-sun fa-3x mb-3"></i>
+                            <h3 id="currentTemp">--°C</h3>
+                            <p id="currentHumidity">Humidity: --%</p>
+                            <p id="currentRainfall">Rainfall: -- mm</p>
+                            <p id="currentWind">Wind: -- km/h</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Weather Forecast</h5>
+                </div>
+                <div class="card-body">
+                    <div id="forecast" class="row">
+                        <!-- Forecast will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Weather Risk Assessment</h5>
+                </div>
+                <div class="card-body">
+                    <div id="riskAssessment">
+                        <div class="alert alert-info">
+                            <h6>Risk Level:</h6>
+                            <p class="mb-1" id="riskLevel">Loading...</p>
+                        </div>
+                        <div class="alert alert-warning">
+                            <h6>Concerns:</h6>
+                            <ul id="concerns" class="mb-0">
+                                <!-- Concerns will be populated here -->
+                            </ul>
+                        </div>
+                        <div class="alert alert-success">
+                            <h6>Recommendations:</h6>
+                            <ul id="recommendations" class="mb-0">
+                                <!-- Recommendations will be populated here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function loadWeatherData() {
+    try {
+        // Get current weather
+        const currentResponse = await fetch('/api/weather/current');
+        const currentData = await currentResponse.json();
+        
+        document.getElementById('currentTemp').textContent = `${currentData.temperature}°C`;
+        document.getElementById('currentHumidity').textContent = `Humidity: ${currentData.humidity}%`;
+        document.getElementById('currentRainfall').textContent = `Rainfall: ${currentData.rainfall} mm`;
+        document.getElementById('currentWind').textContent = `Wind: ${currentData.windSpeed} km/h`;
+
+        // Get forecast
+        const forecastResponse = await fetch('/api/weather/forecast');
+        const forecastData = await forecastResponse.json();
+        
+        const forecastDiv = document.getElementById('forecast');
+        forecastDiv.innerHTML = forecastData.map(day => `
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6>${new Date(day.date).toLocaleDateString()}</h6>
+                        <i class="fas fa-cloud-sun fa-2x mb-2"></i>
+                        <p class="mb-1">${day.temperature}°C</p>
+                        <p class="mb-1">Humidity: ${day.humidity}%</p>
+                        <p class="mb-1">Rainfall: ${day.rainfall} mm</p>
+                        <p class="mb-1">Wind: ${day.windSpeed} km/h</p>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Get risk assessment
+        const riskResponse = await fetch('/api/weather/risk');
+        const riskData = await riskResponse.json();
+        
+        document.getElementById('riskLevel').textContent = riskData.riskLevel;
+        document.getElementById('concerns').innerHTML = riskData.concerns.map(concern => 
+            `<li>${concern}</li>`
+        ).join('');
+        document.getElementById('recommendations').innerHTML = riskData.recommendations.map(rec => 
+            `<li>${rec}</li>`
+        ).join('');
+
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('currentWeather').innerHTML = `
+            <div class="alert alert-danger">
+                Error loading weather data. Please try again.
+            </div>
+        `;
+    }
+}
+
+// Load weather data when page loads
+loadWeatherData();
+</script> 

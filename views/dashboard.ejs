@@ -1,0 +1,139 @@
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2>Welcome, <%= user.name %>!</h2>
+            <p class="text-muted">Here's your farming overview</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Weather Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-cloud-sun text-primary me-2"></i>
+                        Weather
+                    </h5>
+                    <div class="weather-info">
+                        <h3 class="mb-2">28°C</h3>
+                        <p class="mb-0">Partly Cloudy</p>
+                        <small class="text-muted">40% chance of rain</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crop Health Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-seedling text-success me-2"></i>
+                        Crop Health
+                    </h5>
+                    <div class="crop-info">
+                        <h3 class="mb-2">Good</h3>
+                        <p class="mb-0">No issues detected</p>
+                        <small class="text-muted">Last checked: Today</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Market Prices Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-line text-info me-2"></i>
+                        Market Prices
+                    </h5>
+                    <div class="market-info">
+                        <h3 class="mb-2">₹2,400/q</h3>
+                        <p class="mb-0">Wheat (Trending Up)</p>
+                        <small class="text-muted">Updated: 2 hours ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Farm Stats Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-farm text-warning me-2"></i>
+                        Farm Stats
+                    </h5>
+                    <div class="farm-info">
+                        <h3 class="mb-2"><%= user.farmSize || 0 %> acres</h3>
+                        <p class="mb-0"><%= user.location || 'Location not set' %></p>
+                        <small class="text-muted">2 crops growing</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Recent Activities -->
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Activities</h5>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Disease scan completed</h6>
+                                <small>3 days ago</small>
+                            </div>
+                            <p class="mb-1">No diseases detected in wheat crop</p>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Weather alert</h6>
+                                <small>5 days ago</small>
+                            </div>
+                            <p class="mb-1">Heavy rainfall expected next week</p>
+                        </a>
+                        <a href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">Market price update</h6>
+                                <small>1 week ago</small>
+                            </div>
+                            <p class="mb-1">Wheat prices increased by 5%</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a href="/disease" class="btn btn-primary">
+                            <i class="fas fa-camera me-2"></i>
+                            Scan for Diseases
+                        </a>
+                        <a href="/weather" class="btn btn-info text-white">
+                            <i class="fas fa-cloud me-2"></i>
+                            Check Weather
+                        </a>
+                        <a href="/market" class="btn btn-success">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            View Market Prices
+                        </a>
+                        <a href="/crops" class="btn btn-warning">
+                            <i class="fas fa-seedling me-2"></i>
+                            Crop Advisory
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

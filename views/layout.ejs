@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Helper - <%= title %></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+        }
+        .sidebar .nav-link {
+            color: #fff;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #495057;
+        }
+        .sidebar .nav-link.active {
+            background-color: #0d6efd;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .user-info {
+            color: #fff;
+            padding: 15px;
+            border-bottom: 1px solid #495057;
+            margin-bottom: 15px;
+        }
+        .user-info i {
+            margin-right: 10px;
+        }
+        .auth-page {
+            min-height: 100vh;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <% if (path === '/login' || path === '/register' || path === '/home') { %>
+        <!-- Auth Pages Layout -->
+        <div class="auth-page">
+            <%- body %>
+        </div>
+    <% } else { %>
+        <!-- Main Layout with Sidebar -->
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-md-3 col-lg-2 px-0 sidebar">
+                    <div class="d-flex flex-column">
+                        <div class="user-info">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user-circle"></i>
+                                <%= user ? user.name : 'Guest' %>
+                            </h5>
+                            <small class="text-muted">
+                                <%= user ? user.location || 'Location not set' : '' %>
+                            </small>
+                        </div>
+                        <ul class="nav flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link <%= path === '/dashboard' ? 'active' : '' %>" href="/dashboard">
+                                    <i class="fas fa-home me-2"></i> Dashboard
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <%= path === '/crops' ? 'active' : '' %>" href="/crops">
+                                    <i class="fas fa-seedling me-2"></i> Crop Selection
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <%= path === '/disease' ? 'active' : '' %>" href="/disease">
+                                    <i class="fas fa-bug me-2"></i> Disease Detection
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <%= path === '/weather' ? 'active' : '' %>" href="/weather">
+                                    <i class="fas fa-cloud-sun me-2"></i> Weather
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link <%= path === '/market' ? 'active' : '' %>" href="/market">
+                                    <i class="fas fa-chart-line me-2"></i> Market Prices
+                                </a>
+                            </li>
+                            <li class="nav-item mt-auto">
+                                <a class="nav-link <%= path === '/profile' ? 'active' : '' %>" href="/profile">
+                                    <i class="fas fa-user-cog me-2"></i> Profile
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/auth/logout">
+                                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-md-9 col-lg-10 main-content">
+                    <%- body %>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <% if (typeof script !== 'undefined' && script) { %>
+        <%- script %>
+    <% } %>
+</body>
+</html> 

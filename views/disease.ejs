@@ -1,0 +1,117 @@
+<div class="container-fluid">
+    <h2 class="mb-4">Disease Detection</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Upload Plant Image</h5>
+                </div>
+                <div class="card-body">
+                    <form id="diseaseForm">
+                        <div class="mb-3">
+                            <label for="image" class="form-label">Plant Image</label>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*" required>
+                            <div class="form-text">Upload a clear image of the plant leaves or affected area.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Detect Disease</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Detection Results</h5>
+                </div>
+                <div class="card-body">
+                    <div id="results">
+                        <p class="text-muted">Upload an image to detect plant diseases.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Common Plant Diseases</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Disease</th>
+                                    <th>Symptoms</th>
+                                    <th>Treatment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Wheat Rust</td>
+                                    <td>Orange-brown pustules on leaves</td>
+                                    <td>Apply fungicide and maintain proper spacing</td>
+                                </tr>
+                                <tr>
+                                    <td>Rice Blast</td>
+                                    <td>Diamond-shaped lesions on leaves</td>
+                                    <td>Use resistant varieties and proper water management</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('diseaseForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData();
+    const imageFile = document.getElementById('image').files[0];
+    formData.append('image', imageFile);
+
+    try {
+        const response = await fetch('/api/disease/detect', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        
+        // Display results
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.innerHTML = `
+            <div class="text-center mb-3">
+                <img src="${data.imageUrl}" alt="Uploaded plant image" class="img-fluid rounded" style="max-height: 200px;">
+            </div>
+            <div class="alert alert-info">
+                <h6>Detected Disease:</h6>
+                <p class="mb-1">${data.disease.name}</p>
+                <p class="mb-1">Confidence: ${(data.confidence * 100).toFixed(1)}%</p>
+            </div>
+            <div class="alert alert-warning">
+                <h6>Symptoms:</h6>
+                <p class="mb-1">${data.disease.symptoms}</p>
+            </div>
+            <div class="alert alert-success">
+                <h6>Recommended Treatment:</h6>
+                <p class="mb-1">${data.disease.treatment}</p>
+            </div>
+        `;
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('results').innerHTML = `
+            <div class="alert alert-danger">
+                Error detecting disease. Please try again.
+            </div>
+        `;
+    }
+});
+</script> 

@@ -1,0 +1,115 @@
+<div class="container-fluid">
+    <h2 class="mb-4">Crop Selection</h2>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Get Crop Recommendations</h5>
+                </div>
+                <div class="card-body">
+                    <form id="cropForm">
+                        <div class="mb-3">
+                            <label for="soilType" class="form-label">Soil Type</label>
+                            <select class="form-select" id="soilType" name="soilType" required>
+                                <option value="">Select soil type</option>
+                                <option value="loamy">Loamy</option>
+                                <option value="clay">Clay</option>
+                                <option value="sandy">Sandy</option>
+                                <option value="black">Black</option>
+                                <option value="red">Red</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ph" class="form-label">Soil pH</label>
+                            <input type="number" class="form-control" id="ph" name="ph" step="0.1" min="0" max="14" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="rainfall" class="form-label">Annual Rainfall (mm)</label>
+                            <input type="number" class="form-control" id="rainfall" name="rainfall" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="temperature" class="form-label">Average Temperature (°C)</label>
+                            <input type="number" class="form-control" id="temperature" name="temperature" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Get Recommendations</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Recommended Crops</h5>
+                </div>
+                <div class="card-body">
+                    <div id="recommendations">
+                        <p class="text-muted">Fill out the form to get crop recommendations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('cropForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = {
+        soilType: document.getElementById('soilType').value,
+        ph: parseFloat(document.getElementById('ph').value),
+        rainfall: parseFloat(document.getElementById('rainfall').value),
+        temperature: parseFloat(document.getElementById('temperature').value)
+    };
+
+    try {
+        const response = await fetch('/api/crops/recommend', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+        
+        // Display recommendations
+        const recommendationsDiv = document.getElementById('recommendations');
+        recommendationsDiv.innerHTML = `
+            <h6>Recommended Crops:</h6>
+            <div class="list-group">
+                ${data.recommendedCrops.map(crop => `
+                    <div class="list-group-item">
+                        <h6 class="mb-1">${crop.name}</h6>
+                        <p class="mb-1">Confidence: ${(crop.confidence * 100).toFixed(1)}%</p>
+                        <p class="mb-1">Expected Yield: ${crop.expectedYield} tons/hectare</p>
+                        <p class="mb-1">Market Value: ₹${crop.marketValue}/ton</p>
+                    </div>
+                `).join('')}
+            </div>
+            <h6 class="mt-3">Soil Analysis:</h6>
+            <ul class="list-group">
+                <li class="list-group-item">pH: ${data.soilAnalysis.pH}</li>
+                <li class="list-group-item">Nitrogen: ${data.soilAnalysis.nitrogen.toFixed(1)} mg/kg</li>
+                <li class="list-group-item">Phosphorus: ${data.soilAnalysis.phosphorus.toFixed(1)} mg/kg</li>
+                <li class="list-group-item">Potassium: ${data.soilAnalysis.potassium.toFixed(1)} mg/kg</li>
+                <li class="list-group-item">Organic Matter: ${data.soilAnalysis.organicMatter.toFixed(1)}%</li>
+            </ul>
+            <h6 class="mt-3">Recommendations:</h6>
+            <ul class="list-group">
+                ${data.recommendations.map(rec => `
+                    <li class="list-group-item">${rec}</li>
+                `).join('')}
+            </ul>
+        `;
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('recommendations').innerHTML = `
+            <div class="alert alert-danger">
+                Error getting recommendations. Please try again.
+            </div>
+        `;
+    }
+});
+</script> 
