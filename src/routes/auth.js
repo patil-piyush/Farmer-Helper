@@ -7,28 +7,52 @@ const auth = require('../middleware/auth');
 
 // Register page
 router.get('/register', (req, res) => {
-  if (req.user) {
-    return res.redirect('/');
+  try {
+    if (req.user) {
+      return res.redirect('/');
+    }
+    res.render('register', { 
+      title: 'Register',
+      error: req.query.error || null,
+      user: null,
+      path: '/register',
+      req: req
+    });
+  } catch (error) {
+    console.error('Register page error:', error);
+    res.render('register', {
+      title: 'Register',
+      error: 'Error loading registration page',
+      user: null,
+      path: '/register',
+      req: req
+    });
   }
-  res.render('register', { 
-    title: 'Register',
-    error: null,
-    user: null,
-    path: '/register'
-  });
 });
 
 // Login page
 router.get('/login', (req, res) => {
-  if (req.user) {
-    return res.redirect('/');
+  try {
+    if (req.user) {
+      return res.redirect('/');
+    }
+    res.render('login', { 
+      title: 'Login',
+      error: req.query.error || null,
+      user: null,
+      path: '/login',
+      req: req
+    });
+  } catch (error) {
+    console.error('Login page error:', error);
+    res.render('login', {
+      title: 'Login',
+      error: 'Error loading login page',
+      user: null,
+      path: '/login',
+      req: req
+    });
   }
-  res.render('login', { 
-    title: 'Login',
-    error: null,
-    user: null,
-    path: '/login'
-  });
 });
 
 // Register user
@@ -96,8 +120,8 @@ router.post('/register', async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     });
 
-    // Redirect to dashboard
-    res.redirect('/');
+    // Redirect to dashboard instead of home
+    res.redirect('/dashboard');
   } catch (error) {
     console.error('Registration error:', error);
     res.render('register', {
@@ -160,8 +184,8 @@ router.post('/login', async (req, res) => {
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     });
 
-    // Redirect to dashboard
-    res.redirect('/');
+    // Redirect to dashboard instead of home
+    res.redirect('/dashboard');
   } catch (error) {
     console.error('Login error:', error);
     res.render('login', {
@@ -176,7 +200,7 @@ router.post('/login', async (req, res) => {
 // Logout user
 router.get('/logout', (req, res) => {
   res.clearCookie('token');
-  res.redirect('/auth/login');
+  res.redirect('/');
 });
 
 // Update user profile

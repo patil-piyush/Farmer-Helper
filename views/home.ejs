@@ -6,6 +6,7 @@
     <title>Farmer Helper - Empowering Farmers with AI</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         :root {
             --primary-color: #2ecc71;
@@ -16,10 +17,44 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            background-color: rgba(255, 255, 255, 0.98);
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--primary-color) !important;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: var(--dark-color) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+            transform: translateY(-2px);
         }
 
         .hero-section {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1523741543316-beb7fc7023d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
@@ -32,8 +67,11 @@
         }
 
         .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
             position: relative;
-            z-index: 1;
+            z-index: 2;
         }
 
         .hero-title {
@@ -47,173 +85,22 @@
             font-size: 1.5rem;
             margin-bottom: 2rem;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            line-height: 1.6;
         }
 
-        .feature-card {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            height: 100%;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            z-index: 1;
-        }
-
-        .feature-card:hover::before {
-            opacity: 0.05;
-        }
-
-        .feature-icon {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-block;
-        }
-
-        .feature-card:hover .feature-icon {
-            transform: scale(1.2) rotate(5deg);
-            color: var(--secondary-color);
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--dark-color);
-            margin-bottom: 3rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background: var(--primary-color);
-            border-radius: 2px;
-        }
-
-        .benefit-item {
-            margin-bottom: 2.5rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        .btn-custom {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
             position: relative;
             overflow: hidden;
         }
 
-        .benefit-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: var(--primary-color);
-            transform: scaleY(0);
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .benefit-item:hover {
-            transform: translateX(15px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .benefit-item:hover::before {
-            transform: scaleY(1);
-        }
-
-        .benefit-icon {
-            font-size: 2rem;
-            color: var(--primary-color);
-            margin-right: 1rem;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-block;
-        }
-
-        .benefit-item:hover .benefit-icon {
-            transform: scale(1.2) rotate(360deg);
-            color: var(--secondary-color);
-        }
-
-        .navbar {
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
-            padding: 1rem 0;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .navbar.scrolled {
-            padding: 0.5rem 0;
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-
-        .navbar-brand {
-            font-weight: 800;
-            color: var(--primary-color) !important;
-            font-size: 1.5rem;
-        }
-
-        .nav-link {
-            color: var(--dark-color) !important;
-            font-weight: 500;
-            margin: 0 0.5rem;
-            position: relative;
-        }
-
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary-color);
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .nav-link:hover::after {
-            width: 100%;
-        }
-
-        .btn-login, .btn-register {
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-weight: 500;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-login::before, .btn-register::before {
+        .btn-custom::before {
             content: '';
             position: absolute;
             top: 50%;
@@ -226,292 +113,473 @@
             transition: width 0.6s ease, height 0.6s ease;
         }
 
-        .btn-login:hover::before, .btn-register:hover::before {
+        .btn-custom:hover::before {
             width: 300px;
             height: 300px;
         }
 
-        .btn-login:hover, .btn-register:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .contact-section {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        }
-
-        .contact-form {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .contact-form:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
-        }
-
-        .form-control {
-            border-radius: 8px;
-            padding: 0.8rem;
-            border: 1px solid #dee2e6;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .form-control:focus {
+        .btn-primary {
+            background-color: var(--primary-color);
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(46, 204, 113, 0.25);
-            transform: translateY(-2px);
         }
 
-        .cta-section {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 5rem 0;
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .features-section {
+            padding: 8rem 0;
+            background-color: var(--light-color);
             position: relative;
             overflow: hidden;
         }
 
-        .cta-card {
+        .features-section::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: var(--light-color);
+            transform: skewY(-4deg);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-color);
+            margin-bottom: 1rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--primary-color);
+            border-radius: 2px;
+        }
+
+        .feature-card {
             background: white;
+            padding: 3rem 2rem;
             border-radius: 20px;
-            padding: 3rem;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
 
-        .cta-card::before {
+        .feature-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(45deg, rgba(46, 204, 113, 0.05), rgba(39, 174, 96, 0.05));
-            z-index: 1;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.2) rotate(10deg);
+            color: var(--secondary-color);
+        }
+
+        .stats-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .testimonials-section {
+            padding: 8rem 0;
+            background: white;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 2rem 1rem;
+            text-align: center;
+        }
+
+        .testimonial-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            object-fit: cover;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+
+        .cta-section {
+            padding: 6rem 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .cta-title {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
-            color: var(--dark-color);
-            position: relative;
-            z-index: 2;
-        }
-
-        .cta-text {
-            font-size: 1.2rem;
             margin-bottom: 2rem;
-            color: var(--dark-color);
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-            z-index: 2;
         }
 
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .cta-title {
+                font-size: 2rem;
+            }
         }
 
-        .btn-primary:hover {
-            background-color: #007bff;
-            color: white;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .btn-outline-light {
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 0.8rem 2rem;
-            border-radius: 25px;
-            font-weight: 600;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            z-index: 2;
-        }
-
-        .btn-outline-light:hover {
+        .advantages-section {
             background-color: white;
-            border-color: white;
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .advantage-card {
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .advantage-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .advantage-icon {
+            font-size: 2.5rem;
             color: var(--primary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            min-width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: rgba(46, 204, 113, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .advantage-card:hover .advantage-icon {
+            transform: scale(1.1) rotate(10deg);
+            background: rgba(46, 204, 113, 0.2);
+        }
+
+        .advantage-content h4 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--dark-color);
+        }
+
+        .advantage-content p {
+            color: #666;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .advantage-card {
+                padding: 1.5rem;
+            }
+            .advantage-icon {
+                font-size: 2rem;
+                min-width: 50px;
+                height: 50px;
+            }
+            .advantage-content h4 {
+                font-size: 1.1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
-            <a class="navbar-brand" href="/home">
-                <i class="fas fa-seedling me-2"></i>Farmer Helper
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-seedling me-2"></i>
+                Farmer Helper
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link" href="#features">Features</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#benefits">Benefits</a>
+                        <a class="nav-link" href="#testimonials">Testimonials</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#contact">Contact</a>
+                        <a class="nav-link btn btn-outline-success me-2" href="/auth/login">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success text-white" href="/auth/register">Register</a>
                     </li>
                 </ul>
-                <div class="d-flex gap-2">
-                    <a href="/auth/login" class="btn btn-login">Login</a>
-                    <a href="/auth/register" class="btn btn-register">Register</a>
-                </div>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <section class="hero-section">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 hero-content">
-                    <h1 class="hero-title">Farmer Helper</h1>
-                    <p class="hero-subtitle">Empowering farmers with AI-powered precision farming and advisory system</p>
-                    <div class="d-grid gap-3 d-md-flex justify-content-md-center">
-                        <a href="/auth/register" class="btn btn-primary btn-lg">Get Started</a>
-                        <a href="#features" class="btn btn-outline-light btn-lg">Learn More</a>
-                    </div>
-                </div>
+        <div class="hero-content" data-aos="fade-up">
+            <h1 class="hero-title">Transform Your Farming with AI</h1>
+            <p class="hero-subtitle">Join thousands of farmers using cutting-edge technology for smarter crop management, disease detection, and market insights</p>
+            <div class="hero-buttons">
+                <a href="/auth/register" class="btn btn-primary btn-custom">Start Free Trial</a>
+                <a href="#features" class="btn btn-outline-light btn-custom">Explore Features</a>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-5">
+    <section id="features" class="features-section">
         <div class="container">
-            <h2 class="section-title text-center">Our Features</h2>
-            <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-seedling feature-icon"></i>
-                            <h3 class="card-title h4 mb-3">Smart Crop Selection</h3>
-                            <p class="card-text">Get AI-powered recommendations for the best crops based on your soil conditions, climate, and market demand.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-bug feature-icon"></i>
-                            <h3 class="card-title h4 mb-3">Disease Detection</h3>
-                            <p class="card-text">Early detection of crop diseases using advanced image recognition technology to prevent crop loss.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-cloud-sun feature-icon"></i>
-                            <h3 class="card-title h4 mb-3">Weather Forecasting</h3>
-                            <p class="card-text">Accurate weather predictions and risk assessments to help you plan your farming activities.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card feature-card">
-                        <div class="card-body text-center p-4">
-                            <i class="fas fa-chart-line feature-icon"></i>
-                            <h3 class="card-title h4 mb-3">Market Price Prediction</h3>
-                            <p class="card-text">Stay informed about market trends and get price predictions to maximize your profits.</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="section-title" data-aos="fade-up">
+                <h2>Powerful Features</h2>
+                <p class="text-muted">Everything you need to optimize your farming operations</p>
             </div>
-        </div>
-    </section>
-
-    <!-- Benefits Section -->
-    <section id="benefits" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="section-title text-center">How We Help Farmers</h2>
             <div class="row">
-                <div class="col-md-6">
-                    <div class="benefit-item">
-                        <i class="fas fa-check-circle benefit-icon"></i>
-                        <h4 class="h5 mb-3">Increased Crop Yield</h4>
-                        <p class="mb-0">Make data-driven decisions to optimize your farming practices and increase crop productivity.</p>
-                    </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-check-circle benefit-icon"></i>
-                        <h4 class="h5 mb-3">Reduced Costs</h4>
-                        <p class="mb-0">Minimize resource wastage and optimize input usage with precise recommendations.</p>
-                    </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-check-circle benefit-icon"></i>
-                        <h4 class="h5 mb-3">Better Risk Management</h4>
-                        <p class="mb-0">Identify potential risks early and take preventive measures to protect your crops.</p>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card text-center">
+                        <i class="fas fa-seedling feature-icon"></i>
+                        <h3>Smart Crop Selection</h3>
+                        <p>Get AI-powered recommendations for optimal crop selection based on soil conditions, climate data, and market demand.</p>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="benefit-item">
-                        <i class="fas fa-check-circle benefit-icon"></i>
-                        <h4 class="h5 mb-3">Market Intelligence</h4>
-                        <p class="mb-0">Access real-time market data and predictions to make informed selling decisions.</p>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card text-center">
+                        <i class="fas fa-bug feature-icon"></i>
+                        <h3>Disease Detection</h3>
+                        <p>Early detection of crop diseases using advanced image recognition technology. Protect your yield before it's too late.</p>
                     </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-check-circle benefit-icon"></i>
-                        <h4 class="h5 mb-3">Expert Guidance</h4>
-                        <p class="mb-0">Get personalized recommendations based on your specific farming conditions.</p>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card text-center">
+                        <i class="fas fa-cloud-sun feature-icon"></i>
+                        <h3>Weather Prediction</h3>
+                        <p>Get accurate weather forecasts and alerts to plan your farming activities effectively and protect your crops.</p>
                     </div>
-                    <div class="benefit-item">
-                        <i class="fas fa-check-circle benefit-icon"></i>
-                        <h4 class="h5 mb-3">Sustainable Farming</h4>
-                        <p class="mb-0">Adopt environmentally friendly practices with our smart farming recommendations.</p>
+                </div>
+                <div class="col-md-3" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-card text-center">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Market Insights</h3>
+                        <p>Access real-time market prices and trends. Make data-driven decisions to maximize your profits.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-5 contact-section">
+    <!-- Advantages Section -->
+    <section class="advantages-section">
         <div class="container">
-            <h2 class="section-title text-center">Contact Us</h2>
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="contact-form">
-                        <form>
-                            <div class="mb-4">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" rows="4" required></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">Send Message</button>
-                        </form>
+            <div class="section-title" data-aos="fade-up">
+                <h2>Why Choose Farmer Helper</h2>
+                <p class="text-muted">Experience the benefits that make us the preferred choice for modern farmers</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="advantage-card d-flex align-items-start">
+                        <div class="advantage-icon me-3">
+                            <i class="fas fa-rocket text-primary"></i>
+                        </div>
+                        <div class="advantage-content">
+                            <h4>Increased Productivity</h4>
+                            <p>Boost your farm's productivity by up to 40% with our AI-powered recommendations and precise farming techniques.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="advantage-card d-flex align-items-start">
+                        <div class="advantage-icon me-3">
+                            <i class="fas fa-coins text-primary"></i>
+                        </div>
+                        <div class="advantage-content">
+                            <h4>Cost Reduction</h4>
+                            <p>Minimize resource wastage and reduce operational costs by up to 30% through smart resource management.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="advantage-card d-flex align-items-start">
+                        <div class="advantage-icon me-3">
+                            <i class="fas fa-shield-alt text-primary"></i>
+                        </div>
+                        <div class="advantage-content">
+                            <h4>Risk Management</h4>
+                            <p>Protect your crops with early disease detection and weather alerts, reducing crop loss by up to 45%.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="advantage-card d-flex align-items-start">
+                        <div class="advantage-icon me-3">
+                            <i class="fas fa-chart-bar text-primary"></i>
+                        </div>
+                        <div class="advantage-content">
+                            <h4>Data-Driven Decisions</h4>
+                            <p>Make informed decisions based on real-time data analytics and market intelligence reports.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="advantage-card d-flex align-items-start">
+                        <div class="advantage-icon me-3">
+                            <i class="fas fa-leaf text-primary"></i>
+                        </div>
+                        <div class="advantage-content">
+                            <h4>Sustainable Farming</h4>
+                            <p>Implement eco-friendly practices while maintaining high yields through optimized resource utilization.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="advantage-card d-flex align-items-start">
+                        <div class="advantage-icon me-3">
+                            <i class="fas fa-headset text-primary"></i>
+                        </div>
+                        <div class="advantage-content">
+                            <h4>24/7 Expert Support</h4>
+                            <p>Get round-the-clock assistance from our team of agricultural experts and technical support staff.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-up">
+                    <div class="stat-item">
+                        <div class="stat-number">10,000+</div>
+                        <div class="stat-label">Active Farmers</div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stat-item">
+                        <div class="stat-number">30%</div>
+                        <div class="stat-label">Yield Increase</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>What Farmers Say</h2>
+                <p class="text-muted">Success stories from our community</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="testimonial-card">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Farmer" class="testimonial-img">
+                        <p class="testimonial-text">"The crop disease detection feature saved my entire wheat harvest. This tool is a game-changer for modern farming."</p>
+                        <h5>John Smith</h5>
+                        <p class="text-muted">Wheat Farmer, Kansas</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="testimonial-card">
+                        <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="Farmer" class="testimonial-img">
+                        <p class="testimonial-text">"The market insights helped me time my sales perfectly. My profits increased by 40% in just one season!"</p>
+                        <h5>Sarah Johnson</h5>
+                        <p class="text-muted">Organic Farmer, California</p>
+                    </div>
+                </div>
+                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="testimonial-card">
+                        <img src="https://randomuser.me/api/portraits/men/2.jpg" alt="Farmer" class="testimonial-img">
+                        <p class="testimonial-text">"The AI recommendations for crop selection were spot on. I've never had better yields in 20 years of farming."</p>
+                        <h5>Michael Chen</h5>
+                        <p class="text-muted">Rice Farmer, Texas</p>
                     </div>
                 </div>
             </div>
@@ -521,23 +589,23 @@
     <!-- CTA Section -->
     <section class="cta-section">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="cta-card text-center">
-                        <h2 class="cta-title">Ready to Transform Your Farming?</h2>
-                        <p class="cta-text">Join thousands of farmers who are already using Farmer Helper to improve their yields and profits. Start your journey towards smarter farming today.</p>
-                        <div class="d-grid gap-3 d-md-flex justify-content-md-center">
-                            <a href="/auth/register" class="btn btn-primary btn-lg">Create Account</a>
-                            <a href="/auth/login" class="btn btn-outline-light btn-lg">Login</a>
-                        </div>
-                    </div>
-                </div>
+            <div class="cta-content" data-aos="fade-up">
+                <h2 class="cta-title">Ready to Transform Your Farm?</h2>
+                <p class="lead mb-4">Join thousands of successful farmers who are already using our platform</p>
+                <a href="/auth/register" class="btn btn-primary btn-custom">Get Started Now</a>
             </div>
         </div>
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
         // Navbar scroll effect
         window.addEventListener('scroll', function() {
             if (window.scrollY > 50) {
