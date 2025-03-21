@@ -18,11 +18,7 @@ A comprehensive web application that helps farmers improve their farming practic
 
 ## Project Structure
 
-```
-farmer-helper/
-├── backend/           # Node.js backend application
-└── README.md          # Project documentation
-```
+
 
 ## Setup Instructions
 
