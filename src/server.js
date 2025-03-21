@@ -29,17 +29,14 @@ app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 // MongoDB Connection with retry logic
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('Connected to MongoDB');
   } catch (err) {
     console.error('MongoDB connection error:', err);
-    // Retry connection after 5 seconds
-    setTimeout(connectDB, 5000);
+    setTimeout(connectDB, 5000); // Retry after 5 seconds
   }
 };
+
 
 connectDB();
 
